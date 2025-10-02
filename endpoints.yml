@@ -1,0 +1,15 @@
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+
+# Tracker store disabled to prevent DSN errors
+# Uncomment after setting up environment variables properly
+# tracker_store:
+#   type: sql
+#   dialect: "postgresql"
+#   host: "ep-old-thunder-aglnv54r.c-2.eu-central-1.aws.neon.tech"
+#   port: 5432
+#   db: "healthcare_db"
+#   username: "neondb_owner"
+#   password: "npg_zvyiCXMnkZ56"
+#   query:
+#     sslmode: "require"

@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  rasa:
+    image: rasa/rasa:3.6.21
+    container_name: rasa_server
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./:/app
+    command: run --enable-api --cors "*" --debug
+    environment:
+      - NEON_DB_URL=${NEON_DB_URL}
+    depends_on:
+      - rasa-actions
+    networks:
+      - rasa-network
+
+  rasa-actions:
+    image: rasa/rasa-sdk:3.6.2
+    container_name: rasa_actions
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./actions:/app/actions
+    environment:
+      - NEON_DB_URL=${NEON_DB_URL}
+    networks:
+      - rasa-network
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: streamlit_ui
+    ports:
+      - "8501:8501"
+    environment:
+      - RASA_SERVER_URL=http://rasa:5005/webhooks/rest/webhook
+    depends_on:
+      - rasa
+    networks:
+      - rasa-network
+
+networks:
+  rasa-network:
+    driver: bridge

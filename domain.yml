@@ -1,0 +1,135 @@
+version: '3.1'
+intents:
+- affirm
+- book_appointment
+- bot_challenge
+- cancel_appointment
+- check_availability
+- check_my_appointments
+- deny
+- goodbye
+- greet
+- handover_human
+- handover_nurse
+- list_doctors
+- modify_appointment
+- mood_great
+- mood_unhappy
+- provide_datetime
+- provide_doctor
+- provide_email
+- provide_name
+- reschedule_appointment
+- select_doctor
+- stop
+- triage_symptoms
+entities:
+- symptom
+- datetime
+- patient_name
+- email
+- doctor_name
+- specialty
+- appointment_id
+slots:
+  patient_name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: patient_name
+  patient_email:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: email
+  doctor_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: custom
+  doctor_name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: doctor_name
+  appointment_datetime:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: datetime
+  appointment_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: appointment_id
+  symptom:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: symptom
+  requested_slot:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+responses:
+  utter_greet:
+  - text: Hello! I'm your healthcare assistant. How can I help you today?
+  - text: Hi there! Welcome to our healthcare service. What can I do for you?
+  utter_goodbye:
+  - text: Goodbye! Take care of your health.
+  - text: Have a great day! Stay healthy.
+  utter_iamabot:
+  - text: I am a healthcare assistant bot powered by AI to help you with appointments and medical triage.
+  utter_ask_patient_name:
+  - text: What is your full name?
+  - text: Could you please provide your name?
+  utter_ask_patient_email:
+  - text: What is your email address?
+  - text: Please provide your email for appointment confirmation.
+  utter_ask_doctor_name:
+  - text: Which doctor would you like to book an appointment with? (Type 'list doctors' to see all doctors)
+  - text: Please tell me the doctor's name you prefer.
+  utter_ask_appointment_datetime:
+  - text: 'What date and time would you prefer? (Format: YYYY-MM-DD HH:MM, e.g., 2025-10-15 14:00)'
+  - text: When would you like to schedule your appointment? (YYYY-MM-DD HH:MM)
+  utter_default:
+  - text: I'm sorry, I didn't understand. Could you rephrase that?
+  utter_handover_initiated:
+  - text: I'm connecting you with a nurse. Please hold on.
+  - text: Transferring you to a healthcare professional now.
+  utter_ask_continue:
+  - text: Would you like to continue with the booking?
+  utter_triage_initial:
+  - text: Can you describe your symptoms?
+actions:
+- utter_triage_initial
+- action_triage_symptoms
+- action_handover_nurse
+- action_list_doctors
+- action_book_appointment
+- action_cancel_appointment
+- action_reschedule_appointment
+- action_modify_appointment
+- action_check_availability
+- action_handover_human
+- action_check_my_appointments
+- action_default_fallback
+- action_deactivate_loop
+- validate_appointment_form
+forms:
+  appointment_form:
+    required_slots:
+    - patient_name
+    - patient_email
+    - doctor_name
+    - appointment_datetime
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
